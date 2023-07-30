@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { db } from "../../../firebase";
+import { addDoc, collection } from 'firebase/firestore'
 
 export default function DbvForm() {
   const [office, setOffice] = useState("");
@@ -29,9 +31,41 @@ export default function DbvForm() {
   const [cpfResponsible, setCpfResponsible] = useState("")
   const [baptized, setBaptized] = useState("");
 
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
-    
+
+    await addDoc(collection(db, "desbravadores"), {
+      office: office,
+      nome: name,
+      sexo: sex,
+      tamanhoCamiseta: sizeShirt,
+      dataNascimento: dateBirth,
+      telefone: phone,
+      estatusCivil: maritalStatus,
+      email: email,
+      endereco: address,
+      numero: number,
+      cep: cep,
+      bairro: bairro,
+      cidade: city,
+      estado: state,
+      rg: rg,
+      cpf: cpf,
+      nomeMae: nameMother,
+      telefoneMae: phoneMother,
+      emailMae: emailMother,
+      nomePai: nameFather,
+      telefonePai: phoneFather,
+      emailPai: emailFather,
+      nomeResponsavel: nameResponsible,
+      telefoneResponsavel: phoneResponsible,
+      emailResponsavel: emailResponsible,
+      cpfResponsavel: cpfResponsible,
+      batizado: baptized,
+      createdAt: new Date()
+    })
+    .then(res => alert("Desbravador adicionado com sucesso =D"))
+    .catch(error => console.log(error))
   };
 
   return (
