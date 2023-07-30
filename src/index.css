@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.button {
+    @apply p-2 w-full text-start border-b flex items-center gap-2 hover:text-white/60 hover:border-b-white/60 transition-colors 
+}
+
+.input {
+    @apply bg-transparent mt-1 p-2 border-2 rounded-md focus:outline-none focus:ring focus:ring-green-400 transition-colors
+}
