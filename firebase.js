@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore'
+import {getFirestore} from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDwryDafN-xgLGr_R6Voc4z567Lg7IvtfU",
-  authDomain: "nova-jerusalem-b3c0b.firebaseapp.com",
-  projectId: "nova-jerusalem-b3c0b",
-  storageBucket: "nova-jerusalem-b3c0b.appspot.com",
-  messagingSenderId: "147370105836",
-  appId: "1:147370105836:web:e74c385150e3925e5efec9"
+  apiKey: "AIzaSyDFQ0OjplF81k3Rld6oc_s0zOjPvZG9tFo",
+  authDomain: "nova-jerusalem-f751c.firebaseapp.com",
+  projectId: "nova-jerusalem-f751c",
+  storageBucket: "nova-jerusalem-f751c.appspot.com",
+  messagingSenderId: "230146936600",
+  appId: "1:230146936600:web:164737902bd62cbd6c186d"
 };
 
 // Initialize Firebase
