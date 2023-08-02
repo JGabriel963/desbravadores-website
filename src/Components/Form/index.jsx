@@ -1,72 +1,103 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { db } from "../../../firebase";
 import { addDoc, collection } from 'firebase/firestore'
 
 export default function DbvForm() {
-  const [office, setOffice] = useState("");
-  const [name, setName] = useState("");
-  const [sex, setSex] = useState("");
-  const [sizeShirt, setSizeShirt] = useState("");
-  const [dateBirth, setDateBirth] = useState("");
-  const [phone, setPhone] = useState("");
-  const [maritalStatus, setMaritalStatus] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [number, setNumber] = useState("");
-  const [cep, setCep] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [rg, setRg] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [nameMother, setNameMother] = useState("");
-  const [phoneMother, setPhoneMother] = useState("");
-  const [emailMother, setEmailMother] = useState("");
-  const [nameFather, setNameFather] = useState("");
-  const [phoneFather, setPhoneFather] = useState("");
-  const [emailFather, setEmailFather] = useState("");
-  const [nameResponsible, setNameResponsible] = useState("");
-  const [phoneResponsible, setPhoneResponsible] = useState("");
-  const [emailResponsible, setEmailResponsible] = useState("");
-  const [cpfResponsible, setCpfResponsible] = useState("")
-  const [baptized, setBaptized] = useState("");
+  const defaultItem = {
+    office: "",
+    name: "",
+    sex: "",
+    sizeShirt: "",
+    dateBirth: "",
+    phone: "",
+    maritalStatus: "",
+    email: "",
+    address: "",
+    number: "",
+    cep: "",
+    bairro: "",
+    city: "",
+    state: "",
+    rg: "",
+    cpf: "",
+    nameMother: "",
+    phoneMother: "",
+    emailMother: "",
+    nameFather: "",
+    phoneFather: "",
+    emailFather: "",
+    nameResponsible: "",
+    phoneResponsible: "",
+    emailResponsible: "",
+    cpfResponsible: "",
+    baptized: "",
+  }
+
+  const [item, setItem] = useState(defaultItem)
+  const inputRef = useRef()
+
+  const handleChange = (ev) => {
+    setItem(currentState => {
+        return {
+            ...currentState,
+            [ev.target.name]: ev.target.value
+        }
+    })
+}
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
-    await addDoc(collection(db, "desbravadores"), {
-      office: office,
-      nome: name,
-      sexo: sex,
-      tamanhoCamiseta: sizeShirt,
-      dataNascimento: dateBirth,
-      telefone: phone,
-      estatusCivil: maritalStatus,
-      email: email,
-      endereco: address,
-      numero: number,
-      cep: cep,
-      bairro: bairro,
-      cidade: city,
-      estado: state,
-      rg: rg,
-      cpf: cpf,
-      nomeMae: nameMother,
-      telefoneMae: phoneMother,
-      emailMae: emailMother,
-      nomePai: nameFather,
-      telefonePai: phoneFather,
-      emailPai: emailFather,
-      nomeResponsavel: nameResponsible,
-      telefoneResponsavel: phoneResponsible,
-      emailResponsavel: emailResponsible,
-      cpfResponsavel: cpfResponsible,
-      batizado: baptized,
+    const itemDbv = {
+      ...item,
       createdAt: new Date()
+    }
+
+    await addDoc(collection(db, "desbravadores"), itemDbv)
+    .then(() => {
+      alert("Desbravador adicionado com sucesso =D")
+      setItem(defaultItem)
+      inputRef.current.focus()
     })
-    .then(res => alert("Desbravador adicionado com sucesso =D"))
-    .catch(error => console.log(error))
-  };
+    .catch(() => alert("Erro ao realizar cadastro"))
+  }
+
+  // const handleSubmit = async (ev) => {
+  //   ev.preventDefault();
+
+  //   await addDoc(collection(db, "desbravadores"), {
+  //     office: office,
+  //     nome: name,
+  //     sexo: sex,
+  //     tamanhoCamiseta: sizeShirt,
+  //     dataNascimento: dateBirth,
+  //     telefone: phone,
+  //     estatusCivil: maritalStatus,
+  //     email: email,
+  //     endereco: address,
+  //     numero: number,
+  //     cep: cep,
+  //     bairro: bairro,
+  //     cidade: city,
+  //     estado: state,
+  //     rg: rg,
+  //     cpf: cpf,
+  //     nomeMae: nameMother,
+  //     telefoneMae: phoneMother,
+  //     emailMae: emailMother,
+  //     nomePai: nameFather,
+  //     telefonePai: phoneFather,
+  //     emailPai: emailFather,
+  //     nomeResponsavel: nameResponsible,
+  //     telefoneResponsavel: phoneResponsible,
+  //     emailResponsavel: emailResponsible,
+  //     cpfResponsavel: cpfResponsible,
+  //     batizado: baptized,
+  //     createdAt: new Date()
+  //   })
+  //   .then(res => alert("Desbravador adicionado com sucesso =D"))
+  //   .catch(error => console.log(error))
+  // };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -79,11 +110,13 @@ export default function DbvForm() {
               Função <span className="text-red-500">*</span>
             </label>
             <select
+              name="office"
               required
               id="function"
               className="input"
-              value={office}
-              onChange={(e) => setOffice(e.target.value)}
+              ref={inputRef}
+              value={item.office}
+              onChange={handleChange}
             >
               <option selected>Escolha um opção</option>
               <option value="Desbravador">Desbravador</option>
@@ -95,10 +128,11 @@ export default function DbvForm() {
               Nome <span className="text-red-500">*</span>
             </label>
             <input
+              name="name"
               required
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={item.name}
+              onChange={handleChange}
               id="name"
               className="input"
               placeholder="Digite o nome aqui..."
@@ -113,11 +147,12 @@ export default function DbvForm() {
               Sexo: <span className="text-red-500">*</span>
             </label>
             <select 
+                name="sex"
                 required 
                 id="sex" 
                 className="input"
-                value={sex}
-                onChange={e => setSex(e.target.value)}
+                value={item.sex}
+                onChange={handleChange}
             >
               <option selected>Escolha um opção</option>
               <option value="Masculino">Masculino</option>
@@ -129,11 +164,12 @@ export default function DbvForm() {
               Tamanho da Camiseta: <span className="text-red-500">*</span>
             </label>
             <select 
+                name="sizeShirt"
                 required 
                 id="sex" 
                 className="input"
-                value={sizeShirt}
-                onChange={e => setSizeShirt(e.target.value)}
+                value={item.sizeShirt}
+                onChange={handleChange}
             >
               <option selected>Escolha um opção</option>
               <option value="P">P</option>
@@ -147,12 +183,13 @@ export default function DbvForm() {
               Data de Nascimento: <span className="text-red-500">*</span>
             </label>
             <input 
+                name="dateBirth"
                 required
                 type="date" 
                 id="idade" 
                 className="input"
-                value={dateBirth}
-                onChange={e => setDateBirth(e.target.value)} 
+                value={item.dateBirth}
+                onChange={handleChange} 
             />
           </div>
           <div className="flex flex-col">
@@ -160,12 +197,13 @@ export default function DbvForm() {
               Telefone:
             </label>
             <input
+              name="phone"
               type="text"
               id="phone"
               placeholder="(XX) XXXX-XXXX"
               className="input"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
+              value={item.phone}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col">
@@ -173,11 +211,12 @@ export default function DbvForm() {
               Estado Civil: <span className="text-red-500">*</span>
             </label>
             <select 
+                name="maritalStatus"
                 required 
                 id="maritalStatus" 
                 className="input"
-                value={maritalStatus}
-                onChange={e => setMaritalStatus(e.target.value)}
+                value={item.maritalStatus}
+                onChange={handleChange}
             >
               <option selected>Escolha um opção</option>
               <option value="Solteiro">Solteiro</option>
@@ -194,12 +233,13 @@ export default function DbvForm() {
             Email:
           </label>
           <input
+            name="email"
             type="email"
             id="email"
             placeholder="Digite o email aqui..."
             className="input"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={item.email}
+            onChange={handleChange}
           />
         </div>
 
@@ -209,12 +249,13 @@ export default function DbvForm() {
               Endereço:
             </label>
             <input 
+                name="address"
                 required
                 type="text" 
                 id="address" 
                 className="input"
-                value={address}
-                onChange={e => setAddress(e.target.value)} 
+                value={item.address}
+                onChange={handleChange} 
             />
           </div>
           <div className="flex flex-col w-1/4">
@@ -222,11 +263,12 @@ export default function DbvForm() {
               Nº
             </label>
             <input
+                name="number"
                 type="text" 
                 id="number" 
                 className="input"
-                value={number}
-                onChange={e => setNumber(e.target.value)} 
+                value={item.number}
+                onChange={handleChange} 
             />
           </div>
         </div>
@@ -235,12 +277,13 @@ export default function DbvForm() {
           <label htmlFor="cep" className="font-semibold">
             CEP:
           </label>
-          <input 
+          <input
+            name="cep" 
             type="text" 
             className="input" 
             id="cep" 
-            value={cep}
-            onChange={e => setCep(e.target.value)}
+            value={item.cep}
+            onChange={handleChange}
         />
         </div>
 
@@ -249,19 +292,19 @@ export default function DbvForm() {
             <label htmlFor="bairro" className="font-semibold">
               Bairro:
             </label>
-            <input type="text" id="bairro" className="input" value={bairro} onChange={e => setBairro(e.target.value)} />
+            <input name="bairro" type="text" id="bairro" className="input" value={item.bairro} onChange={handleChange} />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="city" className="font-semibold">
               Cidade:
             </label>
-            <input type="text" id="city" className="input" value={city} onChange={e => setCity(e.target.value)}/>
+            <input name="city" type="text" id="city" className="input" value={item.city} onChange={handleChange}/>
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="state" className="font-semibold">
               Estado:
             </label>
-            <input type="text" id="state" className="input" value={state} onChange={e => setState(e.target.value)} />
+            <input name="state" type="text" id="state" className="input" value={item.state} onChange={handleChange} />
           </div>
         </div>
         <div className="flex gap-4">
@@ -269,13 +312,13 @@ export default function DbvForm() {
             <label htmlFor="rg" className="font-semibold">
               RG:
             </label>
-            <input type="text" className="input" id="rg" value={rg} onChange={e => setRg(e.target.value)} />
+            <input name="rg" type="text" className="input" id="rg" value={item.rg} onChange={handleChange} />
           </div>
           <div className="flex flex-col w-1/2">
             <label htmlFor="cpf" className="font-semibold">
               CPF:
             </label>
-            <input type="text" className="input" id="cpf" value={cpf} onChange={e => setCpf(e.target.value)} />
+            <input name="cpf" type="text" className="input" id="cpf" value={item.cpf} onChange={handleChange} />
           </div>
         </div>
         <div className="flex gap-4">
@@ -283,26 +326,27 @@ export default function DbvForm() {
             <label htmlFor="mother" className="font-semibold">
               Nome da Mãe:
             </label>
-            <input type="text" id="mother" className="input" value={nameMother} onChange={e => setNameMother(e.target.value)} />
+            <input name="nameMother" type="text" id="mother" className="input" value={item.nameMother} onChange={handleChange} />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="phoneMother" className="font-semibold">
               Telefone:
             </label>
             <input
+              name="phoneMother"
               type="text"
               id="phoneMother"
               placeholder="(XX) XXXX-XXXX"
               className="input"
-              value={phoneMother}
-              onChange={e => setPhoneMother(e.target.value)}
+              value={item.phoneMother}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="emailMother" className="font-semibold">
               Email:
             </label>
-            <input type="text" id="emailMother" className="input" value={emailMother} onChange={e => setEmailMother(e.target.value)} />
+            <input name="emailMother" type="text" id="emailMother" className="input" value={item.emailMother} onChange={handleChange} />
           </div>
         </div>
 
@@ -311,26 +355,27 @@ export default function DbvForm() {
             <label htmlFor="father" className="font-semibold">
               Nome da Pai:
             </label>
-            <input type="text" id="father" className="input" value={nameFather} onChange={e => setNameFather(e.target.value)} />
+            <input name="nameFather" type="text" id="father" className="input" value={item.nameFather} onChange={handleChange} />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="phoneFather" className="font-semibold">
               Telefone:
             </label>
             <input
+              name="phoneFather"
               type="text"
               id="phoneFather"
               placeholder="(XX) XXXX-XXXX"
               className="input"
-              value={phoneFather}
-              onChange={e => setPhoneFather(e.target.value)}
+              value={item.phoneFather}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="emailFather" className="font-semibold">
               Email:
             </label>
-            <input type="text" id="emailFather" className="input" value={emailFather} onChange={e => setEmailFather(e.target.value)} />
+            <input name="emailFather" type="text" id="emailFather" className="input" value={item.emailFather} onChange={handleChange} />
           </div>
         </div>
 
@@ -345,33 +390,34 @@ export default function DbvForm() {
               <label htmlFor="responsible" className="font-semibold">
                 Nome do Responsável:
               </label>
-              <input type="text" id="responsible" className="input" value={nameResponsible} onChange={e => setNameResponsible(e.target.value)}  />
+              <input name="nameResponsible" type="text" id="responsible" className="input" value={item.nameResponsible} onChange={handleChange}  />
             </div>
             <div className="flex flex-col w-1/3">
               <label htmlFor="phoneResponsible" className="font-semibold">
                 Telefone:
               </label>
               <input
+                name="phoneResponsible"
                 type="text"
                 id="phoneResponsible"
                 placeholder="(XX) XXXX-XXXX"
                 className="input"
-                value={phoneResponsible}
-                onChange={e => setPhoneResponsible(e.target.value)}
+                value={item.phoneResponsible}
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col w-1/3">
               <label htmlFor="emailResponsible" className="font-semibold">
                 Email:
               </label>
-              <input type="text" id="emailResponsible" className="input" value={emailResponsible} onChange={e => setEmailResponsible(e.target.value)} />
+              <input name="emailResponsible" type="text" id="emailResponsible" className="input" value={item.emailResponsible} onChange={handleChange} />
             </div>
           </div>
           <div className="flex flex-col">
             <label htmlFor="cpfResponsible" className="font-semibold">
               CPF do Responsável:
             </label>
-            <input type="text" id="cpfResponsible" className="input" value={cpfResponsible} onChange={e => setCpfResponsible(e.target.value)} />
+            <input name="cpfResponsible" type="text" id="cpfResponsible" className="input" value={item.cpfResponsible} onChange={handleChange} />
 
             <span>
               Se a criança não tem CPF proprio, preencha o CPF do responsável.
@@ -380,9 +426,9 @@ export default function DbvForm() {
         </div>
         <div className="flex flex-col">
           <label htmlFor="baptized" className="font-semibold">
-            Batizado?
+            Batizado? <span className="text-red-500">*</span>
           </label>
-          <select id="baptized" className="input" value={baptized} onChange={e => setBaptized(e.target.value)}>
+          <select name="baptized" required id="baptized" className="input" value={item.baptized} onChange={handleChange}>
             <option selected>Escolha sua opção</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
