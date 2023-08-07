@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { db } from "../../../firebase";
 import { addDoc, collection } from 'firebase/firestore'
+import { toast } from "react-toastify";
 
 export default function DbvForm() {
   const defaultItem = {
@@ -55,49 +56,16 @@ export default function DbvForm() {
 
     await addDoc(collection(db, "desbravadores"), itemDbv)
     .then(() => {
-      alert("Desbravador adicionado com sucesso =D")
+      toast.success("Desbravador Adicionado")
       setItem(defaultItem)
       inputRef.current.focus()
     })
-    .catch(() => alert("Erro ao realizar cadastro"))
+    .catch((error) => {
+      console.log(error)
+      toast.error("Erro ao Cadastrar")
+    })
   }
 
-  // const handleSubmit = async (ev) => {
-  //   ev.preventDefault();
-
-  //   await addDoc(collection(db, "desbravadores"), {
-  //     office: office,
-  //     nome: name,
-  //     sexo: sex,
-  //     tamanhoCamiseta: sizeShirt,
-  //     dataNascimento: dateBirth,
-  //     telefone: phone,
-  //     estatusCivil: maritalStatus,
-  //     email: email,
-  //     endereco: address,
-  //     numero: number,
-  //     cep: cep,
-  //     bairro: bairro,
-  //     cidade: city,
-  //     estado: state,
-  //     rg: rg,
-  //     cpf: cpf,
-  //     nomeMae: nameMother,
-  //     telefoneMae: phoneMother,
-  //     emailMae: emailMother,
-  //     nomePai: nameFather,
-  //     telefonePai: phoneFather,
-  //     emailPai: emailFather,
-  //     nomeResponsavel: nameResponsible,
-  //     telefoneResponsavel: phoneResponsible,
-  //     emailResponsavel: emailResponsible,
-  //     cpfResponsavel: cpfResponsible,
-  //     batizado: baptized,
-  //     createdAt: new Date()
-  //   })
-  //   .then(res => alert("Desbravador adicionado com sucesso =D"))
-  //   .catch(error => console.log(error))
-  // };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -234,7 +202,7 @@ export default function DbvForm() {
           </label>
           <input
             name="email"
-            type="email"
+            type="text"
             id="email"
             placeholder="Digite o email aqui..."
             className="input"
