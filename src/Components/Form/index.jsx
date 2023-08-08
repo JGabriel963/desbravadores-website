@@ -3,9 +3,8 @@ import { db } from "../../../firebase";
 import { addDoc, collection } from 'firebase/firestore'
 import { toast } from "react-toastify";
 
-export default function DbvForm() {
+export default function DbvForm({ itemToUpdate }) {
   const defaultItem = {
-    office: "",
     name: "",
     sex: "",
     sizeShirt: "",
@@ -34,7 +33,8 @@ export default function DbvForm() {
     baptized: "",
   }
 
-  const [item, setItem] = useState(defaultItem)
+  const [item, setItem] = useState(itemToUpdate ? itemToUpdate : defaultItem)
+  const [office, setOffice] = useState("")
   const inputRef = useRef()
 
   const handleChange = (ev) => {
@@ -54,22 +54,32 @@ export default function DbvForm() {
       createdAt: new Date()
     }
 
-    await addDoc(collection(db, "desbravadores"), itemDbv)
-    .then(() => {
-      toast.success("Desbravador Adicionado")
-      setItem(defaultItem)
-      inputRef.current.focus()
-    })
-    .catch((error) => {
+    try {
+      if (itemToUpdate) {
+        toast.success("Item para Atualizar")
+      } else {
+        const dbvCollection = office === "Desbravador" ? "desbravadores" : "diretoria"
+        await addDoc(collection(db, dbvCollection), itemDbv)
+          .then(() => {
+            toast.success("Desbravador Adicionado")
+            setItem(defaultItem)
+            inputRef.current.focus()
+          })
+          .catch((error) => {
+            console.log(error)
+            toast.error("Erro ao Cadastrar")
+          })
+      }
+    } catch (error) {
       console.log(error)
-      toast.error("Erro ao Cadastrar")
-    })
+      toast.error("Erro inesperado!")
+    }
+
   }
 
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1 className="font-extrabold text-2xl mb-3">Registro de Membro</h1>
       <div className="space-y-8 text-gray-500">
         <div className="grid grid-cols-2 gap-x-4">
           <div className="flex flex-col">
@@ -78,15 +88,14 @@ export default function DbvForm() {
               Função <span className="text-red-500">*</span>
             </label>
             <select
-              name="office"
               required
               id="function"
               className="input"
               ref={inputRef}
-              value={item.office}
-              onChange={handleChange}
+              value={office}
+              onChange={(e) => setOffice(e.target.value)}
             >
-              <option selected>Escolha um opção</option>
+              <option value="">Escolha um opção</option>
               <option value="Desbravador">Desbravador</option>
               <option value="Diretoria">Diretoria</option>
             </select>
@@ -97,8 +106,8 @@ export default function DbvForm() {
             </label>
             <input
               name="name"
-              required
               type="text"
+              required
               value={item.name}
               onChange={handleChange}
               id="name"
@@ -122,7 +131,7 @@ export default function DbvForm() {
                 value={item.sex}
                 onChange={handleChange}
             >
-              <option selected>Escolha um opção</option>
+              <option value="">Escolha um opção</option>
               <option value="Masculino">Masculino</option>
               <option value="Feminino">Femenino</option>
             </select>
@@ -139,7 +148,7 @@ export default function DbvForm() {
                 value={item.sizeShirt}
                 onChange={handleChange}
             >
-              <option selected>Escolha um opção</option>
+              <option value="">Escolha um opção</option>
               <option value="P">P</option>
               <option value="M">M</option>
               <option value="G">G</option>
@@ -152,8 +161,8 @@ export default function DbvForm() {
             </label>
             <input 
                 name="dateBirth"
-                required
-                type="date" 
+                type="date"
+                required 
                 id="idade" 
                 className="input"
                 value={item.dateBirth}
@@ -162,11 +171,12 @@ export default function DbvForm() {
           </div>
           <div className="flex flex-col">
             <label htmlFor="phone" className="font-semibold">
-              Telefone:
+              Telefone: <span className="text-red-500">*</span>
             </label>
             <input
               name="phone"
-              type="text"
+              type="tel"
+              required
               id="phone"
               placeholder="(XX) XXXX-XXXX"
               className="input"
@@ -176,11 +186,9 @@ export default function DbvForm() {
           </div>
           <div className="flex flex-col">
             <label htmlFor="maritalStatus" className="font-semibold ">
-              Estado Civil: <span className="text-red-500">*</span>
-            </label>
+              Estado Civil:</label>
             <select 
                 name="maritalStatus"
-                required 
                 id="maritalStatus" 
                 className="input"
                 value={item.maritalStatus}
@@ -218,7 +226,6 @@ export default function DbvForm() {
             </label>
             <input 
                 name="address"
-                required
                 type="text" 
                 id="address" 
                 className="input"
@@ -396,8 +403,8 @@ export default function DbvForm() {
           <label htmlFor="baptized" className="font-semibold">
             Batizado? <span className="text-red-500">*</span>
           </label>
-          <select name="baptized" required id="baptized" className="input" value={item.baptized} onChange={handleChange}>
-            <option selected>Escolha sua opção</option>
+          <select name="baptized" id="baptized" required className="input" value={item.baptized} onChange={handleChange}>
+            <option value="">Escolha sua opção</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
           </select>
@@ -406,6 +413,12 @@ export default function DbvForm() {
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
           Cadastrar
         </button>
+
+        {itemToUpdate ? (
+          <button className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">
+          Excluir
+        </button>
+        ): null}
       </div>
     </form>
   );

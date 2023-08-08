@@ -30,7 +30,7 @@ export default function Sidebar() {
               Desbravadores
             </button>
           </Link>
-          <Link to="/" className="w-full">
+          <Link to="/diretoria" className="w-full">
             <button className="button">
               <BsFillFilePersonFill />
               Diretoria
