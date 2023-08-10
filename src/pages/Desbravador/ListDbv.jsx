@@ -15,7 +15,6 @@ const dbvRef = collection(db, "desbravadores");
 export default function ListDbv() {
   const [loadDbv, setloadDbv] = useState(true);
   const [desbravadores, setDebravadores] = useState([]);
-  const [isEmpty, setEmpty] = useState(false);
 
   useEffect(() => {
     async function loadDbv() {
@@ -50,8 +49,6 @@ export default function ListDbv() {
 
       setDebravadores((desbravadores) => [...desbravadores, ...list]);
     }
-
-    console.log(desbravadores);
   }
 
   if (loadDbv) {

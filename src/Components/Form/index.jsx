@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
-import { db } from "../../../firebase";
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore'
 import { toast } from "react-toastify";
+import { db } from "../../../firebase";
+import { useNavigate } from "react-router-dom";
+import InputMask from 'react-input-mask';
 
 export default function DbvForm({ itemToUpdate }) {
   const defaultItem = {
@@ -34,7 +36,8 @@ export default function DbvForm({ itemToUpdate }) {
   }
 
   const [item, setItem] = useState(itemToUpdate ? itemToUpdate : defaultItem)
-  const [office, setOffice] = useState("")
+  const [office, setOffice] = useState(itemToUpdate ? itemToUpdate.office : "")
+  const navigate = useNavigate()
   const inputRef = useRef()
 
   const handleChange = (ev) => {
@@ -49,20 +52,37 @@ export default function DbvForm({ itemToUpdate }) {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
-    const itemDbv = {
-      ...item,
-      createdAt: new Date()
-    }
 
     try {
       if (itemToUpdate) {
-        toast.success("Item para Atualizar")
+        const collectionUpdate = itemToUpdate.office === "Desbravador" ? "desbravadores" : "diretoria"
+        
+        await updateDoc(doc(db, collectionUpdate, itemToUpdate.id), item)
+        .then(() => {
+          toast.info("Atualizado com sucesso")
+          setOffice("")
+          navigate("/desbravadores")
+        })
+        .catch((error) => {
+          console.log(error)
+          toast.error("Ops, erro ao tentar atualizar!")
+        })
+
+        return
       } else {
         const dbvCollection = office === "Desbravador" ? "desbravadores" : "diretoria"
+
+        const itemDbv = {
+          ...item,
+          office: office,
+          createdAt: new Date()
+        }
+
         await addDoc(collection(db, dbvCollection), itemDbv)
           .then(() => {
             toast.success("Desbravador Adicionado")
             setItem(defaultItem)
+            setOffice("")
             inputRef.current.focus()
           })
           .catch((error) => {
@@ -96,7 +116,7 @@ export default function DbvForm({ itemToUpdate }) {
               onChange={(e) => setOffice(e.target.value)}
             >
               <option value="">Escolha um opção</option>
-              <option value="Desbravador">Desbravador</option>
+              <option value="Desbravador" >Desbravador</option>
               <option value="Diretoria">Diretoria</option>
             </select>
           </div>
@@ -159,9 +179,10 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="idade" className="font-semibold">
               Data de Nascimento: <span className="text-red-500">*</span>
             </label>
-            <input 
+            <InputMask
+                mask="99/99/9999" 
                 name="dateBirth"
-                type="date"
+                type="text"
                 required 
                 id="idade" 
                 className="input"
@@ -173,7 +194,8 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="phone" className="font-semibold">
               Telefone: <span className="text-red-500">*</span>
             </label>
-            <input
+            <InputMask
+              mask="(99) 99999-9999"
               name="phone"
               type="tel"
               required
@@ -194,7 +216,7 @@ export default function DbvForm({ itemToUpdate }) {
                 value={item.maritalStatus}
                 onChange={handleChange}
             >
-              <option selected>Escolha um opção</option>
+              <option value="">Escolha um opção</option>
               <option value="Solteiro">Solteiro</option>
               <option value="Casado">Casado</option>
               <option value="Divorciado">Divorciado</option>
@@ -210,7 +232,7 @@ export default function DbvForm({ itemToUpdate }) {
           </label>
           <input
             name="email"
-            type="text"
+            type="email"
             id="email"
             placeholder="Digite o email aqui..."
             className="input"
@@ -293,7 +315,7 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="cpf" className="font-semibold">
               CPF:
             </label>
-            <input name="cpf" type="text" className="input" id="cpf" value={item.cpf} onChange={handleChange} />
+            <InputMask mask="999.999.999-99" name="cpf" type="text" className="input" id="cpf" value={item.cpf} onChange={handleChange} />
           </div>
         </div>
         <div className="flex gap-4">
@@ -307,7 +329,8 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="phoneMother" className="font-semibold">
               Telefone:
             </label>
-            <input
+            <InputMask
+              mask="(99) 99999-9999"
               name="phoneMother"
               type="text"
               id="phoneMother"
@@ -321,7 +344,7 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="emailMother" className="font-semibold">
               Email:
             </label>
-            <input name="emailMother" type="text" id="emailMother" className="input" value={item.emailMother} onChange={handleChange} />
+            <input name="emailMother" type="email" id="emailMother" className="input" value={item.emailMother} onChange={handleChange} />
           </div>
         </div>
 
@@ -336,7 +359,8 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="phoneFather" className="font-semibold">
               Telefone:
             </label>
-            <input
+            <InputMask
+              mask="(99) 99999-9999"
               name="phoneFather"
               type="text"
               id="phoneFather"
@@ -350,7 +374,7 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="emailFather" className="font-semibold">
               Email:
             </label>
-            <input name="emailFather" type="text" id="emailFather" className="input" value={item.emailFather} onChange={handleChange} />
+            <input name="emailFather" type="email" id="emailFather" className="input" value={item.emailFather} onChange={handleChange} />
           </div>
         </div>
 
@@ -371,7 +395,8 @@ export default function DbvForm({ itemToUpdate }) {
               <label htmlFor="phoneResponsible" className="font-semibold">
                 Telefone:
               </label>
-              <input
+              <InputMask
+                mask="(99) 99999-9999"
                 name="phoneResponsible"
                 type="text"
                 id="phoneResponsible"
@@ -385,14 +410,14 @@ export default function DbvForm({ itemToUpdate }) {
               <label htmlFor="emailResponsible" className="font-semibold">
                 Email:
               </label>
-              <input name="emailResponsible" type="text" id="emailResponsible" className="input" value={item.emailResponsible} onChange={handleChange} />
+              <input name="emailResponsible" type="email" id="emailResponsible" className="input" value={item.emailResponsible} onChange={handleChange} />
             </div>
           </div>
           <div className="flex flex-col">
             <label htmlFor="cpfResponsible" className="font-semibold">
               CPF do Responsável:
             </label>
-            <input name="cpfResponsible" type="text" id="cpfResponsible" className="input" value={item.cpfResponsible} onChange={handleChange} />
+            <InputMask mask="999.999.999-99" name="cpfResponsible" type="text" id="cpfResponsible" className="input" value={item.cpfResponsible} onChange={handleChange} />
 
             <span>
               Se a criança não tem CPF proprio, preencha o CPF do responsável.
@@ -414,11 +439,6 @@ export default function DbvForm({ itemToUpdate }) {
           Cadastrar
         </button>
 
-        {itemToUpdate ? (
-          <button className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">
-          Excluir
-        </button>
-        ): null}
       </div>
     </form>
   );

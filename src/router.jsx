@@ -20,7 +20,7 @@ const router = createBrowserRouter([{
                 {index: true, element: <ListDbv />},
                 {path: "new", element: <AddDbv />},
                 {path: ":id", element: <ShowDbv />},
-                {path: ":id/update", element: <UpdateDbv />}
+                {path: "update/:id", element: <UpdateDbv />}
             ]
         },
         {
