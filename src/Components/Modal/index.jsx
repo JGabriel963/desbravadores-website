@@ -4,9 +4,9 @@ export default function Modal({isOpen, setIsOpen, title, message, deleteDbv}) {
     if (isOpen) {
         return (
             <div className="fixed bg-black/30 top-0 bottom-0 left-0 right-0 bg-tertiary-color/50 z-50">
-                <div className="h-full w-full flex justify-center items-center">
+                <div className="h-full w-full  flex justify-center items-start">
                     <div
-                        className="flex flex-col  bg-green-100 p-6  rounded-2xl w-[90%] md:w-[50%] relative my-2 shadow-md"
+                        className="flex flex-col  bg-green-100 p-6  rounded-2xl w-[90%] md:w-[50%] relative mt-8 shadow-md"
                     >
                         <h2 className='text-2xl font-bold text-green-700'>
                             {title}

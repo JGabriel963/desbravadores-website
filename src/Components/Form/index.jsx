@@ -147,13 +147,13 @@ export default function DbvForm({ itemToUpdate }) {
                 name="sex"
                 required 
                 id="sex" 
-                className="input"
+                className="input-check"
                 value={item.sex}
                 onChange={handleChange}
             >
               <option value="">Escolha um opção</option>
               <option value="Masculino">Masculino</option>
-              <option value="Feminino">Femenino</option>
+              <option value="Feminino">Feminino</option>
             </select>
           </div>
           <div className="flex flex-col">
@@ -164,7 +164,7 @@ export default function DbvForm({ itemToUpdate }) {
                 name="sizeShirt"
                 required 
                 id="sex" 
-                className="input"
+                className="input-check"
                 value={item.sizeShirt}
                 onChange={handleChange}
             >
@@ -212,7 +212,7 @@ export default function DbvForm({ itemToUpdate }) {
             <select 
                 name="maritalStatus"
                 id="maritalStatus" 
-                className="input"
+                className="input-check"
                 value={item.maritalStatus}
                 onChange={handleChange}
             >
@@ -261,7 +261,7 @@ export default function DbvForm({ itemToUpdate }) {
             </label>
             <input
                 name="number"
-                type="text" 
+                type="number" 
                 id="number" 
                 className="input"
                 value={item.number}
@@ -274,7 +274,8 @@ export default function DbvForm({ itemToUpdate }) {
           <label htmlFor="cep" className="font-semibold">
             CEP:
           </label>
-          <input
+          <InputMask
+            mask="99999-999"
             name="cep" 
             type="text" 
             className="input" 
@@ -309,7 +310,7 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="rg" className="font-semibold">
               RG:
             </label>
-            <input name="rg" type="text" className="input" id="rg" value={item.rg} onChange={handleChange} />
+            <InputMask mask="9.999.999" name="rg" type="text" className="input" id="rg" value={item.rg} onChange={handleChange} />
           </div>
           <div className="flex flex-col w-1/2">
             <label htmlFor="cpf" className="font-semibold">
