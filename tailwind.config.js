@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'placa': "url('/public/placa-3.png')"
+      }
+    },
   },
   plugins: [],
 }
