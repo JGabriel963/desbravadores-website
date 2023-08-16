@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
-import { addDoc, collection, doc, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../../../firebase";
 import { useNavigate } from "react-router-dom";
-import InputMask from 'react-input-mask';
+import InputMask from "react-input-mask";
 
 export default function DbvForm({ itemToUpdate }) {
   const defaultItem = {
@@ -33,93 +33,93 @@ export default function DbvForm({ itemToUpdate }) {
     emailResponsible: "",
     cpfResponsible: "",
     baptized: "",
-  }
+  };
 
-  const [item, setItem] = useState(itemToUpdate ? itemToUpdate : defaultItem)
-  const [office, setOffice] = useState(itemToUpdate ? itemToUpdate.office : "")
-  const navigate = useNavigate()
-  const inputRef = useRef()
+  const [item, setItem] = useState(itemToUpdate ? itemToUpdate : defaultItem);
+  const [office, setOffice] = useState(itemToUpdate ? itemToUpdate.office : "");
+  const navigate = useNavigate();
+  const inputRef = useRef();
 
   const handleChange = (ev) => {
-    setItem(currentState => {
-        return {
-            ...currentState,
-            [ev.target.name]: ev.target.value
-        }
-    })
-}
+    setItem((currentState) => {
+      return {
+        ...currentState,
+        [ev.target.name]: ev.target.value,
+      };
+    });
+  };
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
-
     try {
       if (itemToUpdate) {
-        const collectionUpdate = itemToUpdate.office === "Desbravador" ? "desbravadores" : "diretoria"
-        
-        await updateDoc(doc(db, collectionUpdate, itemToUpdate.id), item)
-        .then(() => {
-          toast.info("Atualizado com sucesso")
-          setOffice("")
-          navigate("/desbravadores")
-        })
-        .catch((error) => {
-          console.log(error)
-          toast.error("Ops, erro ao tentar atualizar!")
-        })
+        const collectionUpdate =
+          itemToUpdate.office === "Desbravador" ? "desbravadores" : "diretoria";
 
-        return
+        await updateDoc(doc(db, collectionUpdate, itemToUpdate.id), item)
+          .then(() => {
+            toast.info("Atualizado com sucesso");
+            setOffice("");
+            navigate("/desbravadores");
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error("Ops, erro ao tentar atualizar!");
+          });
+
+        return;
       } else {
-        const dbvCollection = office === "Desbravador" ? "desbravadores" : "diretoria"
+        const dbvCollection =
+          office === "Desbravador" ? "desbravadores" : "diretoria";
 
         const itemDbv = {
           ...item,
           office: office,
-          createdAt: new Date()
-        }
+          createdAt: new Date(),
+        };
 
         await addDoc(collection(db, dbvCollection), itemDbv)
           .then(() => {
-            toast.success("Desbravador Adicionado")
-            setItem(defaultItem)
-            setOffice("")
-            inputRef.current.focus()
+            toast.success("Desbravador Adicionado");
+            setItem(defaultItem);
+            setOffice("");
+            inputRef.current.focus();
           })
           .catch((error) => {
-            console.log(error)
-            toast.error("Erro ao Cadastrar")
-          })
+            console.log(error);
+            toast.error("Erro ao Cadastrar");
+          });
       }
     } catch (error) {
-      console.log(error)
-      toast.error("Erro inesperado!")
+      console.log(error);
+      toast.error("Erro inesperado!");
     }
-
-  }
-
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-8 text-gray-500">
         <div className="grid grid-cols-2 gap-x-4">
-          <div className="flex flex-col">
-            {/* Função e Nome */}
-            <label htmlFor="function" className="font-semibold ">
-              Função <span className="text-red-500">*</span>
-            </label>
-            <select
-              required
-              id="function"
-              className="input"
-              ref={inputRef}
-              value={office}
-              onChange={(e) => setOffice(e.target.value)}
-            >
-              <option value="">Escolha um opção</option>
-              <option value="Desbravador" >Desbravador</option>
-              <option value="Diretoria">Diretoria</option>
-            </select>
-          </div>
+          {!itemToUpdate ? (
+            <div className="flex flex-col">
+              <label htmlFor="function" className="font-semibold ">
+                Função <span className="text-red-500">*</span>
+              </label>
+              <select
+                required
+                id="function"
+                className="input"
+                ref={inputRef}
+                value={office}
+                onChange={(e) => setOffice(e.target.value)}
+              >
+                <option value="">Escolha um opção</option>
+                <option value="Desbravador">Desbravador</option>
+                <option value="Diretoria">Diretoria</option>
+              </select>
+            </div>
+          ) : null}
           <div className="flex flex-col">
             <label htmlFor="name" className="font-semibold ">
               Nome <span className="text-red-500">*</span>
@@ -143,13 +143,13 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="sex" className="font-semibold ">
               Sexo: <span className="text-red-500">*</span>
             </label>
-            <select 
-                name="sex"
-                required 
-                id="sex" 
-                className="input-check"
-                value={item.sex}
-                onChange={handleChange}
+            <select
+              name="sex"
+              required
+              id="sex"
+              className="input-check"
+              value={item.sex}
+              onChange={handleChange}
             >
               <option value="">Escolha um opção</option>
               <option value="Masculino">Masculino</option>
@@ -160,13 +160,13 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="sex" className="font-semibold ">
               Tamanho da Camiseta: <span className="text-red-500">*</span>
             </label>
-            <select 
-                name="sizeShirt"
-                required 
-                id="sex" 
-                className="input-check"
-                value={item.sizeShirt}
-                onChange={handleChange}
+            <select
+              name="sizeShirt"
+              required
+              id="sex"
+              className="input-check"
+              value={item.sizeShirt}
+              onChange={handleChange}
             >
               <option value="">Escolha um opção</option>
               <option value="P">P</option>
@@ -180,14 +180,14 @@ export default function DbvForm({ itemToUpdate }) {
               Data de Nascimento: <span className="text-red-500">*</span>
             </label>
             <InputMask
-                mask="99/99/9999" 
-                name="dateBirth"
-                type="text"
-                required 
-                id="idade" 
-                className="input"
-                value={item.dateBirth}
-                onChange={handleChange} 
+              mask="99/99/9999"
+              name="dateBirth"
+              type="text"
+              required
+              id="idade"
+              className="input"
+              value={item.dateBirth}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col">
@@ -208,13 +208,14 @@ export default function DbvForm({ itemToUpdate }) {
           </div>
           <div className="flex flex-col">
             <label htmlFor="maritalStatus" className="font-semibold ">
-              Estado Civil:</label>
-            <select 
-                name="maritalStatus"
-                id="maritalStatus" 
-                className="input-check"
-                value={item.maritalStatus}
-                onChange={handleChange}
+              Estado Civil:
+            </label>
+            <select
+              name="maritalStatus"
+              id="maritalStatus"
+              className="input-check"
+              value={item.maritalStatus}
+              onChange={handleChange}
             >
               <option value="">Escolha um opção</option>
               <option value="Solteiro">Solteiro</option>
@@ -246,13 +247,13 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="address" className="font-semibold">
               Endereço:
             </label>
-            <input 
-                name="address"
-                type="text" 
-                id="address" 
-                className="input"
-                value={item.address}
-                onChange={handleChange} 
+            <input
+              name="address"
+              type="text"
+              id="address"
+              className="input"
+              value={item.address}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col w-1/4">
@@ -260,12 +261,12 @@ export default function DbvForm({ itemToUpdate }) {
               Nº
             </label>
             <input
-                name="number"
-                type="number" 
-                id="number" 
-                className="input"
-                value={item.number}
-                onChange={handleChange} 
+              name="number"
+              type="number"
+              id="number"
+              className="input"
+              value={item.number}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -276,13 +277,13 @@ export default function DbvForm({ itemToUpdate }) {
           </label>
           <InputMask
             mask="99999-999"
-            name="cep" 
-            type="text" 
-            className="input" 
-            id="cep" 
+            name="cep"
+            type="text"
+            className="input"
+            id="cep"
             value={item.cep}
             onChange={handleChange}
-        />
+          />
         </div>
 
         <div className="flex gap-4">
@@ -290,19 +291,40 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="bairro" className="font-semibold">
               Bairro:
             </label>
-            <input name="bairro" type="text" id="bairro" className="input" value={item.bairro} onChange={handleChange} />
+            <input
+              name="bairro"
+              type="text"
+              id="bairro"
+              className="input"
+              value={item.bairro}
+              onChange={handleChange}
+            />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="city" className="font-semibold">
               Cidade:
             </label>
-            <input name="city" type="text" id="city" className="input" value={item.city} onChange={handleChange}/>
+            <input
+              name="city"
+              type="text"
+              id="city"
+              className="input"
+              value={item.city}
+              onChange={handleChange}
+            />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="state" className="font-semibold">
               Estado:
             </label>
-            <input name="state" type="text" id="state" className="input" value={item.state} onChange={handleChange} />
+            <input
+              name="state"
+              type="text"
+              id="state"
+              className="input"
+              value={item.state}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className="flex gap-4">
@@ -310,13 +332,29 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="rg" className="font-semibold">
               RG:
             </label>
-            <InputMask mask="9.999.999" name="rg" type="text" className="input" id="rg" value={item.rg} onChange={handleChange} />
+            <InputMask
+              mask="9.999.999"
+              name="rg"
+              type="text"
+              className="input"
+              id="rg"
+              value={item.rg}
+              onChange={handleChange}
+            />
           </div>
           <div className="flex flex-col w-1/2">
             <label htmlFor="cpf" className="font-semibold">
               CPF:
             </label>
-            <InputMask mask="999.999.999-99" name="cpf" type="text" className="input" id="cpf" value={item.cpf} onChange={handleChange} />
+            <InputMask
+              mask="999.999.999-99"
+              name="cpf"
+              type="text"
+              className="input"
+              id="cpf"
+              value={item.cpf}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className="flex gap-4">
@@ -324,7 +362,14 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="mother" className="font-semibold">
               Nome da Mãe:
             </label>
-            <input name="nameMother" type="text" id="mother" className="input" value={item.nameMother} onChange={handleChange} />
+            <input
+              name="nameMother"
+              type="text"
+              id="mother"
+              className="input"
+              value={item.nameMother}
+              onChange={handleChange}
+            />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="phoneMother" className="font-semibold">
@@ -345,7 +390,14 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="emailMother" className="font-semibold">
               Email:
             </label>
-            <input name="emailMother" type="email" id="emailMother" className="input" value={item.emailMother} onChange={handleChange} />
+            <input
+              name="emailMother"
+              type="email"
+              id="emailMother"
+              className="input"
+              value={item.emailMother}
+              onChange={handleChange}
+            />
           </div>
         </div>
 
@@ -354,7 +406,14 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="father" className="font-semibold">
               Nome da Pai:
             </label>
-            <input name="nameFather" type="text" id="father" className="input" value={item.nameFather} onChange={handleChange} />
+            <input
+              name="nameFather"
+              type="text"
+              id="father"
+              className="input"
+              value={item.nameFather}
+              onChange={handleChange}
+            />
           </div>
           <div className="flex flex-col w-1/3">
             <label htmlFor="phoneFather" className="font-semibold">
@@ -375,7 +434,14 @@ export default function DbvForm({ itemToUpdate }) {
             <label htmlFor="emailFather" className="font-semibold">
               Email:
             </label>
-            <input name="emailFather" type="email" id="emailFather" className="input" value={item.emailFather} onChange={handleChange} />
+            <input
+              name="emailFather"
+              type="email"
+              id="emailFather"
+              className="input"
+              value={item.emailFather}
+              onChange={handleChange}
+            />
           </div>
         </div>
 
@@ -390,7 +456,14 @@ export default function DbvForm({ itemToUpdate }) {
               <label htmlFor="responsible" className="font-semibold">
                 Nome do Responsável:
               </label>
-              <input name="nameResponsible" type="text" id="responsible" className="input" value={item.nameResponsible} onChange={handleChange}  />
+              <input
+                name="nameResponsible"
+                type="text"
+                id="responsible"
+                className="input"
+                value={item.nameResponsible}
+                onChange={handleChange}
+              />
             </div>
             <div className="flex flex-col w-1/3">
               <label htmlFor="phoneResponsible" className="font-semibold">
@@ -411,14 +484,29 @@ export default function DbvForm({ itemToUpdate }) {
               <label htmlFor="emailResponsible" className="font-semibold">
                 Email:
               </label>
-              <input name="emailResponsible" type="email" id="emailResponsible" className="input" value={item.emailResponsible} onChange={handleChange} />
+              <input
+                name="emailResponsible"
+                type="email"
+                id="emailResponsible"
+                className="input"
+                value={item.emailResponsible}
+                onChange={handleChange}
+              />
             </div>
           </div>
           <div className="flex flex-col">
             <label htmlFor="cpfResponsible" className="font-semibold">
               CPF do Responsável:
             </label>
-            <InputMask mask="999.999.999-99" name="cpfResponsible" type="text" id="cpfResponsible" className="input" value={item.cpfResponsible} onChange={handleChange} />
+            <InputMask
+              mask="999.999.999-99"
+              name="cpfResponsible"
+              type="text"
+              id="cpfResponsible"
+              className="input"
+              value={item.cpfResponsible}
+              onChange={handleChange}
+            />
 
             <span>
               Se a criança não tem CPF proprio, preencha o CPF do responsável.
@@ -429,7 +517,14 @@ export default function DbvForm({ itemToUpdate }) {
           <label htmlFor="baptized" className="font-semibold">
             Batizado? <span className="text-red-500">*</span>
           </label>
-          <select name="baptized" id="baptized" required className="input" value={item.baptized} onChange={handleChange}>
+          <select
+            name="baptized"
+            id="baptized"
+            required
+            className="input"
+            value={item.baptized}
+            onChange={handleChange}
+          >
             <option value="">Escolha sua opção</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
@@ -439,7 +534,6 @@ export default function DbvForm({ itemToUpdate }) {
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
           Cadastrar
         </button>
-
       </div>
     </form>
   );

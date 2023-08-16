@@ -6,6 +6,8 @@ import { toast } from 'react-toastify'
 
 export default function Home() {
     const [desbravadores, setDesbravadores] = useState([])
+    const [batizados, setBatizados] = useState([])
+    const [notBaptized, setNotBaptized] = useState([])
     const [diretoria, setDiretoria] = useState([])
     const [loadInfoDbv, setLoadInfoDbv] = useState(true)
     const [loadInfoDiretoria, setLoadInfoDiretoria] = useState(true)
@@ -14,6 +16,7 @@ export default function Home() {
     useEffect(() => {
         async function loadDbv() {
             let listDbv = []
+            let batizados = []
 
             await getDocs(collection(db, "desbravadores"))
             .then((snapshot) => {
@@ -22,6 +25,9 @@ export default function Home() {
                 })
 
                 setDesbravadores(listDbv)
+                setBatizados(listDbv.filter((doc) => doc.baptized === "Sim"))
+                setNotBaptized(listDbv.filter((doc) => doc.baptized === "Não"))
+                console.log(desbravadores)
                 setLoadInfoDbv(false)
             })
             .catch((error) => {
@@ -56,11 +62,19 @@ export default function Home() {
     }, [])
 
 
+
     return (
-        <div className="h-full flex justify-center items-start">
-            <div className='grid grid-cols-2 gap-6 mt-4'>
+        <div className="h-full flex flex-col justify-center items-center">
+            <h1 className='text-5xl font-semibold text-green-900 mb-5'>Clube Nova Jerusalém</h1>
+            <div className='flex flex-col sm:grid sm:grid-cols-3 gap-6 mt-4'>
                 <BoxDash title="Desbravadores" quantity={desbravadores.length} loadInfo={loadInfoDbv} />
                 <BoxDash title="Diretoria" quantity={diretoria.length} loadInfo={loadInfoDiretoria} />
+                <BoxDash title="Total" quantity={desbravadores.length + diretoria.length} loadInfo={loadInfoDbv} />
+                <div className='col-span-3 flex flex-col sm:flex-row gap-6 justify-center'>
+
+                    <BoxDash title="Batizados" quantity={batizados.length} loadInfo={loadInfoDbv} />
+                    <BoxDash title="Não Batizados" quantity={notBaptized.length} loadInfo={loadInfoDbv} />
+                </div>
             </div>
         </div>
     )

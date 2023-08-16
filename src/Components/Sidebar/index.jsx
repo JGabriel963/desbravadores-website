@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <section className="bg-green-600 h-full w-1/5 py-6 px-4">
+    <section className="hidden sm:block bg-green-600 h-full w-1/5 py-6 px-4">
       <div className="rounded-full w-[90px] h-[90px] mx-auto flex justify-center items-center mb-10">
         <img src={logo} alt="" />
       </div>
