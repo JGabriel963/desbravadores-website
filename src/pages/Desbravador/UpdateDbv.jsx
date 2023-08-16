@@ -103,7 +103,11 @@ export default function UpdateDbv() {
           </button>
         </div>
       ) : null}
-      <Modal isOpen={openModal} setIsOpen={setOpenModal} title="Atenção" message={`Tem cereza que desaja excluir o desbravador(a) ${desbravador.name} dos registros`} deleteDbv={handleDeleteDbv} />
+
+      {openModal ? (
+
+        <Modal close={() => setOpenModal(!openModal)} title="Atenção" message={`Tem cereza que desaja excluir o desbravador(a) ${desbravador.name} dos registros`} deleteDbv={handleDeleteDbv} />
+      ): null}
     </div>
   );
 }
