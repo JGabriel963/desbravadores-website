@@ -7,17 +7,17 @@ import DbvForm from "../../Components/Form";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../Components/Modal";
 
-export default function UpdateDbv() {
-  const [openModal, setOpenModal] = useState(false)
+export default function UpdateDiretoria() {
+  const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
-  const [desbravador, setDesbravador] = useState({});
+  const [diretoria, setDiretoria] = useState({});
   const [loadDbvCustomer, setLoadDbvCustomer] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function loadDbv() {
+    async function loadDiretoria() {
       if (id) {
-        await getDoc(doc(db, "desbravadores", id))
+        await getDoc(doc(db, "diretoria", id))
           .then((snapshot) => {
             let itemDbv = {
               id: snapshot.id,
@@ -50,7 +50,7 @@ export default function UpdateDbv() {
               baptized: snapshot.data().baptized,
             };
 
-            setDesbravador(itemDbv);
+            setDiretoria(itemDbv);
             setLoadDbvCustomer(false);
           })
           .catch((error) => {
@@ -60,34 +60,33 @@ export default function UpdateDbv() {
       }
     }
 
-    loadDbv();
+    loadDiretoria();
   }, [id]);
 
-  async function handleDeleteDbv() {
-    await deleteDoc(doc(db, "desbravadores", id))
+  async function handleDeleteDiretoria() {
+    await deleteDoc(doc(db, "diretoria", id))
     .then(() => {
-      setOpenModal(false)
-      toast.success("Excluido com sucesso")
-      navigate("/desbravadores")
+        setOpenModal(false)
+        toast.success("Excluido com sucesso")
+        navigate("/diretoria")
     })
     .catch((error) => {
-      console.log(error)
-      toast.error("Erro ao excluir")
+        console.log(error)
+        toast.error("Erro ao excluir")
     })
   }
 
   return (
     <div>
       <h1 className="font-extrabold text-blue-500 text-2xl mb-3">
-        Atualizar Membro - Desbravador
+        Atualizar Membro - Diretoria
       </h1>
 
       {!loadDbvCustomer ? (
         <>
-          <DbvForm itemToUpdate={desbravador} linkTo="desbravadores" />
+          <DbvForm itemToUpdate={diretoria} linkTo="diretoria" />
           <hr className="border-1 mt-3 border-gray-400" />
         </>
-        
       ) : (
         <h2>Encontrando membros</h2>
       )}
@@ -103,7 +102,13 @@ export default function UpdateDbv() {
           </button>
         </div>
       ) : null}
-      <Modal isOpen={openModal} setIsOpen={setOpenModal} title="Atenção" message={`Tem cereza que desaja excluir o desbravador(a) ${desbravador.name} dos registros`} deleteDbv={handleDeleteDbv} />
+      <Modal
+        isOpen={openModal}
+        setIsOpen={setOpenModal}
+        title="Atenção"
+        message={`Tem cereza que desaja excluir o desbravador(a) ${diretoria.name} dos registros`}
+        deleteDbv={handleDeleteDiretoria}
+      />
     </div>
   );
 }

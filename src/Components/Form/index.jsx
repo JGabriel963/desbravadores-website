@@ -5,7 +5,7 @@ import { db } from "../../../firebase";
 import { useNavigate } from "react-router-dom";
 import InputMask from "react-input-mask";
 
-export default function DbvForm({ itemToUpdate }) {
+export default function DbvForm({ itemToUpdate, linkTo }) {
   const defaultItem = {
     name: "",
     sex: "",
@@ -61,7 +61,7 @@ export default function DbvForm({ itemToUpdate }) {
           .then(() => {
             toast.info("Atualizado com sucesso");
             setOffice("");
-            navigate("/desbravadores");
+            navigate(`/${linkTo}`);
           })
           .catch((error) => {
             console.log(error);
@@ -532,7 +532,7 @@ export default function DbvForm({ itemToUpdate }) {
         </div>
 
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-          Cadastrar
+          {!itemToUpdate ? 'Cadastrar' : "Atualizar"}
         </button>
       </div>
     </form>

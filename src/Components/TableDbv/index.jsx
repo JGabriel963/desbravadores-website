@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function TableDbv({ desbravadores }) {
+export default function TableDbv({ desbravadores, linkTo }) {
   return (
     <table className=" w-full rounded-md ">
       <thead className="border-b-2">
@@ -22,13 +22,13 @@ export default function TableDbv({ desbravadores }) {
               <td className="p-2 text-center">{item.telefone}</td>
               <td className="p-2 text-center flex justify-center gap-2">
                 <Link
-                  to={`/desbravadores/${item.id}`}
+                  to={`/${linkTo}/${item.id}`}
                   className="bg-blue-500 hover:bg-blue-600 transition-colors p-2 rounded-md text-white"
                 >
                   Ver
                 </Link>
                 <Link
-                  to={`/desbravadores/update/${item.id}`}
+                  to={`/${linkTo}/${item.id}/update`}
                   className="bg-green-500 hover:bg-green-600 transition-colors  p-2 rounded-md text-white"
                 >
                   Editar

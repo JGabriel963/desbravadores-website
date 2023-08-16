@@ -78,7 +78,7 @@ export default function ListDbv() {
             </Link>
           </div>
         ) : (
-          <TableDbv desbravadores={desbravadores} />
+          <TableDbv desbravadores={desbravadores} linkTo="desbravadores" />
         )}
       </>
     </section>

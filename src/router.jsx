@@ -7,6 +7,8 @@ import AddDbv from "./pages/Desbravador/AddDbv";
 import ShowDbv from "./pages/Desbravador/ShowDbv";
 import UpdateDbv from "./pages/Desbravador/UpdateDbv";
 import ListDiretoria from "./pages/Diretoria/ListDiretoria";
+import ShowDiretoria from "./pages/Diretoria/ShowDiretoria";
+import UpdateDiretoria from "./pages/Diretoria/UpdateDiretoria";
 
 const router = createBrowserRouter([{
     path: "/",
@@ -20,14 +22,16 @@ const router = createBrowserRouter([{
                 {index: true, element: <ListDbv />},
                 {path: "new", element: <AddDbv />},
                 {path: ":id", element: <ShowDbv />},
-                {path: "update/:id", element: <UpdateDbv />}
+                {path: ":id/update", element: <UpdateDbv />}
             ]
         },
         {
             path: "diretoria",
             element: <DbvLayout />,
             children: [
-                {index: true, element: <ListDiretoria />}
+                {index: true, element: <ListDiretoria />},
+                {path: ":id", element: <ShowDiretoria />},
+                {path: ":id/update", element: <UpdateDiretoria />}
             ]
         }
     ]

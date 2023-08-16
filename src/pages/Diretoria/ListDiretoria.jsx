@@ -67,8 +67,8 @@ export default function ListDiretoria() {
       <>
         {diretoria.length === 0 ? (
           <div className="space-y-4 mt-8 flex flex-col items-center">
-            <span className="block text-xl ">
-              Nenhum desbravador resgistrado
+            <span className="block text-xl">
+              Nenhum membro da diretoria resgistrado
             </span>
 
             <Link
@@ -79,7 +79,7 @@ export default function ListDiretoria() {
             </Link>
           </div>
         ) : (
-          <TableDbv desbravadores={diretoria} />
+          <TableDbv desbravadores={diretoria} linkTo="diretoria" />
         )}
       </>
     </section>
