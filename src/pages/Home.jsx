@@ -64,16 +64,7 @@ export default function Home() {
 
   return (
     <div className="h-full flex flex-col justify-center items-center">
-      <div className="relative mb-2">
-        <img src={placa} alt="plac-title"/>
-        <div className="absolute w-full h-full top-0 text-center">
-          <div className="h-full flex items-center">
-            <h1 className="text-5xl font-semibold text-amber-600 mb-5">
-              Clube Nova Jerusalém
-            </h1>
-          </div>
-        </div>
-      </div>
+      <h1 className="font-extrabold text-2xl text-green-900">Clube Nova Jerusalém</h1>
       <div className="flex flex-col sm:grid sm:grid-cols-3 gap-6 mt-4">
         <BoxDash
           title="Desbravadores"
