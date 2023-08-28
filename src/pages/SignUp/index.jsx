@@ -27,10 +27,10 @@ export default function SignUp() {
 
   return (
     <div className="h-screen flex items-center justify-center bg-green-300 ">
-      <div className="flex flex-col sm:flex-row md:w-[70%] h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+      <div className="flex flex-col sm:flex-row w-[90%] md:w-[70%] h-[500px] rounded-3xl overflow-hidden shadow-2xl">
         <div className="flex flex-col flex-1 justify-center items-center bg-emerald-600 p-4 text-white space-y-4">
           <div className="w-full">
-            <img src={logo} alt="logo" width={200} className="block mx-auto" />
+            <img src={logo} alt="logo" width={200} className="hidden sm:block mx-auto" />
           </div>
           <div className="text-center">
             <h2 className="text-3xl font-extrabold">Já possui um clube?</h2>

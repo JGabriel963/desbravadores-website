@@ -76,7 +76,7 @@ export default function Home() {
       <h1 className="font-extrabold text-2xl text-green-900">
         Clube {user.name}
       </h1>
-      <div className="flex flex-col sm:grid sm:grid-cols-3 gap-6 mt-4">
+      <div className="grid grid-cols-2  sm:grid-cols-3 gap-6 mt-4">
         <BoxDash
           title="Desbravadores"
           quantity={desbravadores.length}
@@ -92,7 +92,7 @@ export default function Home() {
           quantity={desbravadores.length + diretoria.length}
           loadInfo={loadInfoDbv}
         />
-        <div className="col-span-3 flex flex-col sm:flex-row gap-6 justify-center">
+        <div className="col-span-3 flex flex-row sm:flex-row gap-6 justify-center">
           <BoxDash
             title="Batizados"
             quantity={batizados.length}
