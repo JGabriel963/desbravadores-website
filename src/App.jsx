@@ -1,13 +1,18 @@
-import { RouterProvider } from "react-router-dom"
-import router from "./router"
+import { BrowserRouter } from "react-router-dom";
+import RoutersApp from "./router";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import AuthContextProvider from "./context/auth";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
-  return(
+  return (
     <>
-      <ToastContainer autoClose={3000} />
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <AuthContextProvider>
+          <ToastContainer autoClose={3000} />
+          <RoutersApp />
+        </AuthContextProvider>
+      </BrowserRouter>
     </>
-  )
+  );
 }

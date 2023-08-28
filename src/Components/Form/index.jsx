@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../../../firebase";
 import { useNavigate } from "react-router-dom";
 import InputMask from "react-input-mask";
+import { AuthContext } from "../../context/auth";
 
 export default function DbvForm({ itemToUpdate, linkTo }) {
   const defaultItem = {
@@ -35,6 +36,7 @@ export default function DbvForm({ itemToUpdate, linkTo }) {
     baptized: "",
   };
 
+  const { user } = useContext(AuthContext);
   const [item, setItem] = useState(itemToUpdate ? itemToUpdate : defaultItem);
   const [office, setOffice] = useState(itemToUpdate ? itemToUpdate.office : "");
   const navigate = useNavigate();
@@ -61,7 +63,7 @@ export default function DbvForm({ itemToUpdate, linkTo }) {
           .then(() => {
             toast.info("Atualizado com sucesso");
             setOffice("");
-            navigate(`/${linkTo}`);
+            navigate(`/main/${linkTo}`);
           })
           .catch((error) => {
             console.log(error);
@@ -77,6 +79,7 @@ export default function DbvForm({ itemToUpdate, linkTo }) {
           ...item,
           office: office,
           createdAt: new Date(),
+          userId: user.uid,
         };
 
         await addDoc(collection(db, dbvCollection), itemDbv)
@@ -532,7 +535,7 @@ export default function DbvForm({ itemToUpdate, linkTo }) {
         </div>
 
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-          {!itemToUpdate ? 'Cadastrar' : "Atualizar"}
+          {!itemToUpdate ? "Cadastrar" : "Atualizar"}
         </button>
       </div>
     </form>

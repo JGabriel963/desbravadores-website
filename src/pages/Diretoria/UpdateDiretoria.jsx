@@ -68,7 +68,7 @@ export default function UpdateDiretoria() {
     .then(() => {
         setOpenModal(false)
         toast.success("Excluido com sucesso")
-        navigate("/diretoria")
+        navigate("/main/diretoria")
     })
     .catch((error) => {
         console.log(error)

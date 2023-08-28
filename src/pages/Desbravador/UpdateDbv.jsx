@@ -68,7 +68,7 @@ export default function UpdateDbv() {
     .then(() => {
       setOpenModal(false)
       toast.success("Excluido com sucesso")
-      navigate("/desbravadores")
+      navigate("/main/desbravadores")
     })
     .catch((error) => {
       console.log(error)

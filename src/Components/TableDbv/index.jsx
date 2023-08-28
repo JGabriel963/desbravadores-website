@@ -22,13 +22,13 @@ export default function TableDbv({ desbravadores, linkTo }) {
               <td className="p-2 text-center">{item.telefone}</td>
               <td className="p-2 text-center flex justify-center gap-2">
                 <Link
-                  to={`/${linkTo}/${item.id}`}
+                  to={`/main/${linkTo}/${item.id}`}
                   className="bg-blue-500 hover:bg-blue-600 transition-colors p-2 rounded-md text-white"
                 >
                   Ver
                 </Link>
                 <Link
-                  to={`/${linkTo}/${item.id}/update`}
+                  to={`/main/${linkTo}/${item.id}/update`}
                   className="bg-green-500 hover:bg-green-600 transition-colors  p-2 rounded-md text-white"
                 >
                   Editar

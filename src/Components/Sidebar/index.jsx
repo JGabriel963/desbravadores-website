@@ -4,10 +4,17 @@ import {
   BsFillPersonPlusFill,
   BsFillFilePersonFill,
 } from "react-icons/bs";
+import { BiLogOut } from "react-icons/bi";
 import logo from "../../../public/logo-3d.webp";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/auth";
+import { useContext, useState } from "react";
+import Modal from "../Modal";
 
 export default function Sidebar() {
+  const [openModal, setOpenModal] = useState(false);
+  const { logout, user } = useContext(AuthContext);
+
   return (
     <section className="hidden sm:block bg-green-600 h-full w-1/5 py-6 px-4">
       <div className="rounded-full w-[90px] h-[90px] mx-auto flex justify-center items-center mb-10">
@@ -18,32 +25,45 @@ export default function Sidebar() {
           MENU
         </h1>
         <div className="flex flex-col items-start">
-          <Link to="/" className="w-full">
+          <Link to="/main" className="w-full">
             <button className="button">
               <FaHome />
               Início
             </button>
           </Link>
-          <Link to="/desbravadores" className="w-full">
+          <Link to="/main/desbravadores" className="w-full">
             <button className="button">
               <BsFillPersonLinesFill />
               Desbravadores
             </button>
           </Link>
-          <Link to="/diretoria" className="w-full">
+          <Link to="/main/diretoria" className="w-full">
             <button className="button">
               <BsFillFilePersonFill />
               Diretoria
             </button>
           </Link>
-          <Link to="/desbravadores/new" className="w-full">
+          <Link to="/main/desbravadores/new" className="w-full">
             <button className="button">
               <BsFillPersonPlusFill />
               Cadastrar DBV
             </button>
           </Link>
+          <button className="button" onClick={() => setOpenModal(!openModal)}>
+            <BiLogOut />
+            Sair
+          </button>
         </div>
       </div>
+
+      {openModal ? (
+        <Modal
+          close={() => setOpenModal(!openModal)}
+          title="Atenção"
+          message={`Tem certeza que deseja sair?`}
+          deleteDbv={logout}
+        />
+      ) : null}
     </section>
   );
 }

@@ -4,26 +4,27 @@ import {
   collection,
   query,
   orderBy,
-  onSnapshot,
+  where,
 } from "firebase/firestore";
 import TableDbv from "../../Components/TableDbv";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/auth";
 
 const dbvRef = collection(db, "desbravadores");
 
 export default function ListDbv() {
+  const {user } = useContext(AuthContext)
   const [loadDbv, setloadDbv] = useState(true);
   const [desbravadores, setDebravadores] = useState([]);
 
   useEffect(() => {
     async function loadDbv() {
-      const q = query(dbvRef, orderBy("createdAt", "desc"));
+      const q = query(dbvRef, where("userId", "==", String(user.uid)), orderBy("createdAt", "desc"));
 
       const querySnapshot = await getDocs(q);
       setDebravadores([]);
       await updateState(querySnapshot);
-
       setloadDbv(false);
     }
 
